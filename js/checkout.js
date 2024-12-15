@@ -1,6 +1,4 @@
-// 
 // Variables
-// 
 let lineArr = [];
 
 // form
@@ -26,6 +24,11 @@ const btnPaypal = document.querySelector('.pay-with-paypal');
 const btnCC = document.querySelector(".pay-with-cc");
 
 
+// Selected Offer
+const offersParentEl = document.querySelectorAll('.offers');
+
+// Total
+const summaryShipPrice = document.querySelector(".order-summary-total-value")
 
 
 /**
@@ -49,8 +52,138 @@ const getCampaign = async () => {
 
         console.log(data)
 
+        offers = data;
+
+        console.log('offs', offers);
+
+
         getCampaignData(data);
 
+        renderPackages();
+
+        // Select Offer Event
+        const offersNew = offersParentEl[0].querySelectorAll('.offer');
+
+        if(offersNew !== undefined) {
+
+            offersNew.forEach((offer, index) => {
+
+                let pName = data.packages[index].name;
+                offer.dataset.name = pName;
+
+                let pPriceEach =  data.packages[index].price;
+                offer.dataset.priceEach = pPriceEach;
+
+                let pPriceShipping = data.shipping_methods[0].price;
+                offer.dataset.priceShipping = pPriceShipping;
+
+
+                offer.dataset.priceTotal = data.packages[index].price_total;
+
+                let shippingMethod = data.shipping_methods[0].ref_id;
+                offer.dataset.shippingMethod = shippingMethod;
+
+                offer.dataset.quantity = data.packages[index].qty;
+
+               
+
+                document.getElementById('shipping_method').value = shippingMethod;
+                document.querySelector('.selected-product-name').textContent = pName;
+
+                document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
+
+                if (pPriceShipping != 0.00) {
+                    summaryShipPrice.text = campaign.currency.format(pPriceShipping);
+
+                } else {
+                    summaryShipPrice.text = "FREE";
+                }
+                
+                offer.addEventListener('click',(event) => {
+                    
+                    // reset other
+                    const selectedItems = offersParentEl[0].querySelectorAll('.selected');
+                    selectedItems.forEach(item => {
+                        item.classList.remove('selected');
+                    });
+
+                    console.log('Offer clicked:', offer);
+                    // TODO:
+                    // set value//class
+
+
+                    offer.classList.add('selected');
+
+                    
+                    //  _----------------
+
+
+                    // let pid = offer.dataset.packageId;
+                    offer.dataset.packageId = data.packages[index].ref_id;
+
+                    // {
+                    //     "ref_id": 1,
+                    //     "name": "1x Example Product",
+                    //     "external_id": 2,
+                    //     "qty": 1,
+                    //     "price": "19.00",
+                    //     "price_total": "19.00",
+                    //     "price_retail": "20.00",
+                    //     "price_retail_total": "20.00",
+                    //     "is_recurring": false,
+                    //     "price_recurring": null,
+                    //     "price_recurring_total": null,
+                    //     "interval": null,
+                    //     "interval_count": null,
+                    //     "image": "https://d1xly3wkgehfot.cloudfront.net/media/cache/47/38/473811c3b7f1af5db541aa1b93f6e071.png"
+                    // }
+    
+                    let pName = data.packages[index].name;
+                    offer.dataset.name = pName;
+    
+                    let pPriceEach =  data.packages[index].price;
+                    offer.dataset.priceEach = pPriceEach;
+    
+                    let pPriceShipping = data.shipping_methods[0].price;
+                    offer.dataset.priceShipping = pPriceShipping;
+
+
+                    offer.dataset.priceTotal = data.packages[index].price_total;
+
+                    let shippingMethod = data.shipping_methods[0].ref_id;
+                    offer.dataset.shippingMethod = shippingMethod;
+    
+                    offer.dataset.quantity = data.packages[index].qty;
+
+                   
+    
+                    document.getElementById('shipping_method').value = shippingMethod;
+                    document.querySelector('.selected-product-name').textContent = pName;
+    
+                    document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
+    
+                    if (pPriceShipping != 0.00) {
+                        summaryShipPrice.text = campaign.currency.format(pPriceShipping);
+    
+                    } else {
+                        summaryShipPrice.text = "FREE";
+                    }
+    
+                
+    
+                    // firstLineItem.package_id = pid
+    
+    
+                    console.log("Change Line Items:", lineArr);
+    
+                    calculateTotal()
+    
+                });
+            });
+        }else {
+            console.log('Error', 'No offers present!');
+        }
+        // Select Offer event END
 
     } catch (error) {
         console.log(error);
@@ -63,6 +196,8 @@ const getCampaignData = (data) => {
     payEnvKey = data.payment_env_key;
     Spreedly.init(payEnvKey, { "numberEl": "bankcard-number", "cvvEl": "bankcard-cvv" });
 }
+
+
 
 /**
  *  Create Cart / New Prospect
@@ -151,7 +286,9 @@ const createOrder = async () => {
     }
 
 
-    console.log(orderData);
+
+
+    orderData.payment_detail.card_token = 'test_card'; // FIXME: move to the data object
 
     try {
         const response = await fetch(ordersURL, {
@@ -211,11 +348,24 @@ const createOrder = async () => {
             
             console.log ('Something went wrong', result);
             let error = Object.values(result)[0];
-            document.getElementById("payment-error-block").innerHTML = `
-                <div class="alert alert-danger">
-                    ${error}
-                </div>
-            `;
+
+            let errorMessageAll = '';
+            if(Array.isArray(result.message)){
+                result.message.forEach(err => {
+                    // Loop through each property in the error object
+                    for (const [key, value] of Object.entries(err)) {
+                        if (Array.isArray(value)) {
+                            // Concatenate all error messages for the property
+                            errorMessageAll += `<div class="alert alert-danger">
+                                                ${key}: ${value.join(', ')}\n
+                                            </div>`;
+                        }
+                    }
+                });
+            }
+
+            document.getElementById("payment-error-block").innerHTML = errorMessageAll;
+
             return;
         }
 
@@ -286,8 +436,10 @@ const createPayPalOrder = async () => {
 
 
 }
-const retrieveCampaign = campaign.once(getCampaign);
 
+const retrieveCampaign = campaign.once(getCampaign);
+const container = document.querySelector(".offers");
+container.innerHTML = '';
 retrieveCampaign();
 
 /**
@@ -355,14 +507,15 @@ const renderPackages = () => {
         item.dataset.packageId = package.id;
         item.dataset.name = package.name;
         item.dataset.quantity = package.quantity;
-        item.dataset.priceTotal = package.priceTotal.toFixed(2);
-        item.dataset.priceEach = package.price.toFixed(2);
-        item.dataset.priceShipping = package.shippingPrice.toFixed(2);
+        item.dataset.priceTotal = package.priceTotal;
+        item.dataset.priceEach = package.price;
+        item.dataset.priceShipping = package.shippingPrice;
         item.dataset.shippingMethod = package.shippingMethod;
         item.innerHTML = template;
         item.querySelector(".offer-title-text").textContent = package.name;
         item.querySelector(".p-image").src = package.image;
-        item.querySelector(".price-each-retail").textContent = campaign.currency.format(offers.priceRetail);
+        item.querySelector(".price-each-retail").textContent = campaign.currency.format(offers.price_retail);
+
 
         // prices
         let priceElement = item.querySelector('.price-each');
@@ -389,18 +542,22 @@ const renderPackages = () => {
  * Calculate totals 
  */
 const calculateTotal = () => {
-
+    
     let selectedPackage = document.querySelector(".offer.selected");
-    let packagePrice
-    let shippingPrice = selectedPackage.dataset.priceShipping
 
-    packagePrice = selectedPackage.dataset.priceTotal;
+    if(selectedPackage !== null){
 
-    let checkoutTotal = parseFloat(packagePrice) + parseFloat(shippingPrice);
-
-    let orderTotal = document.querySelector(".order-summary-total-value");
-
-    orderTotal.textContent = campaign.currency.format(checkoutTotal);
+        let packagePrice
+        let shippingPrice = selectedPackage.dataset.priceShipping
+    
+        packagePrice = selectedPackage.dataset.priceTotal;
+    
+        let checkoutTotal = parseFloat(packagePrice) + parseFloat(shippingPrice);
+    
+        let orderTotal = document.querySelector(".order-summary-total-value");
+    
+        orderTotal.textContent = campaign.currency.format(checkoutTotal);
+    }
 }
 
 
@@ -446,10 +603,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
 
                 if (pPriceShipping != 0.00) {
-                    summaryShipPrice.textContent = campaign.currency.format(pPriceShipping);
+                    summaryShipPrice.text = campaign.currency.format(pPriceShipping);
 
                 } else {
-                    summaryShipPrice.textContent = "FREE";
+                    summaryShipPrice.text = "FREE";
                 }
 
                 $offer.forEach(function(ell, els) {
@@ -520,3 +677,4 @@ btnPaypal.addEventListener('click', event => {
 btnCC.addEventListener('click', event => {
     formEl.requestSubmit();
 });
+
