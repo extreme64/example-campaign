@@ -4,7 +4,7 @@
 const getOrderReceipt = async () => {
     try {
 
-        const response = await fetch((ordersURL + refId + '/'), {
+        const response = await fetch((`${ordersURL + refId}/`), {
             method: 'GET',
             headers
 
@@ -35,7 +35,7 @@ function show(order) {
       month: "long",
       day: "numeric",
     };
-    let currentDate = new Date().toLocaleDateString(date, dateOptions);
+    const currentDate = new Date().toLocaleDateString(date, dateOptions);
 
 
 
@@ -78,13 +78,13 @@ function show(order) {
 
     const rowDiscounts = document.querySelector(".row-discounts");
 
-    if (order.total_discounts != (0.00)) {
+    if (order.total_discounts == (0.00)) {
+        rowDiscounts.classList.add('d-none')
+    } else {
         rowDiscounts.innerHTML = `
                     <div class="col-md-4 p-2 text-end">
                             <div class="summary-order-discount text-success">Additional Discounts: <span class="ms-3">- ${campaign.currency.format(order.total_discounts)}</span> </div>
                         </div>`
-    } else {
-        rowDiscounts.classList.add('d-none')
     }
 
 
