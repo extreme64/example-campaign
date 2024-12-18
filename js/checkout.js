@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
                 console.log("Change Line Items:", lineArr);
 
-                Utill.calculateTotal()
+                Utils.calculateTotal()
 
             });
         });
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     console.log("Default Line Items:", lineArr);
-    Utill.calculateTotal()
+    Utils.calculateTotal()
 
 });
 

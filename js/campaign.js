@@ -117,7 +117,7 @@ const campaign = (() => {
 
                         summaryShipPrice.text = pPriceShipping == 0.00 ? "FREE" : campaign.currency.format(pPriceShipping);
 
-                        Utill.calculateTotal()
+                        Utils.calculateTotal()
 
                     });
                 });
