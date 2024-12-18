@@ -122,10 +122,14 @@
         </div>
     </footer>
 </body>
+<script type="text/javascript" src="js/setup.js"></script>
 <script type="text/javascript">
-const publicKey = "orAFMB5T4oApVS4AiFrY23fBCSnDQcsr0iGV2BLk";
-const nextURL = "/thank-you.html";
+const publicKey = config.publicKey;
+const nextURL = config.nextUrlThankYou;
 const refId = sessionStorage.getItem('ref_id');
+
+//  TODO: Idea, get this from API endpoints
+// e.g. https://campaigns.apps.29next.com/api/v1/packages/{id}/upsells/
 const upsellLineItem = [{
     "package_id": 5,
     "quantity": 1
