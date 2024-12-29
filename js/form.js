@@ -166,6 +166,77 @@ validate
     });
 
 
+
+    chkBxBillingAddress.addEventListener('change', event => {
+        const checkbox = event.currentTarget
+        console.log('MORE validate', checkbox.checked); 
+
+        if (checkbox.checked) {
+            validate.removeField('#id_billing_address_line1');
+            validate.removeField('#id_billing_address_line4');
+            validate.removeField('#id_billing_state');
+            validate.removeField('#id_billing_postcode');
+            validate.removeField('#id_billing_country');
+            return;
+        }
+
+        validate.addField('#id_billing_address_line1', [{
+                rule: 'required',
+                errorMessage: 'Billing address is required',
+            },
+            {
+                rule: 'maxLength',
+                value: 255,
+            },
+        ], 
+        {
+            errorsContainer: '.invalid-billing_address_line1',
+        })
+
+        validate.addField('#id_billing_address_line4', [{
+                rule: 'required',
+                errorMessage: 'Billing city is required',
+            },
+            {
+                rule: 'maxLength',
+                value: 255,
+            },
+        ], 
+        {
+            errorsContainer: '.invalid-billing_address_line4',
+        })
+
+        validate.addField('#id_billing_state', [{
+            rule: 'required',
+            errorMessage: 'Billing state/province is required',
+        },], {
+            errorsContainer: '.invalid-billing_state',
+        })
+
+        validate.addField('#id_billing_postcode', [{
+                rule: 'required',
+                errorMessage: 'Billing ZIP/Postcode is required',
+            },
+            {
+                rule: 'maxLength',
+                value: 64,
+            },
+        ], 
+        {
+            errorsContainer: '.invalid-billing_postcode',
+        })
+
+        validate.addField('#id_billing_country', [{
+            rule: 'required',
+            errorMessage: 'Billing country is required',
+        },], {
+    
+            errorsContainer: '.invalid-billing_country',
+    
+        })
+    })
+
+
 /**
  * Card Validation with Spreedly iFrame
  */
