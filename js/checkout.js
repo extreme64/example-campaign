@@ -14,7 +14,7 @@ const numberParent = document.getElementById("bankcard-number");
 const cardErrBlock = document.getElementById("payment-error-block")
 
 const ccCheckbox = document.getElementById('id_use_new_card');
-const addCheckbox = document.getElementById('id_same_as_shipping');
+// const addCheckbox = document.getElementById('id_same_as_shipping');
 const formCC = document.getElementById('form-cc');
 const formShip = document.getElementById('form-shipping');
 const formBill = document.getElementById('form-billing');
@@ -39,8 +39,11 @@ retrieveCampaign();
 
 const sendProspect = campaign.once(Cart.create);
 
+// Billing address cehckbox
+const chkBxBillingAddress = document.getElementById('id_same_as_shipping');
 
-
+const billingAddressFormPArt = document.getElementById('form-billing');
+billingAddressFormPArt.style.display = 'none';
 // 
 // Inits & Event Listeners
 // 
@@ -153,3 +156,15 @@ btnCreditCard.addEventListener('click', event => {
     formEl.requestSubmit();
 });
 
+chkBxBillingAddress.addEventListener('change', event => {
+    const checkbox = event.currentTarget
+    console.log('Show', 'billing form part'); 
+
+    if (checkbox.checked) {
+        billingAddressFormPArt.style.display = 'none';
+        return;
+    }
+    billingAddressFormPArt.style.display = 'block';
+    checkbox.removeAttribute("checked");
+    ;
+})
