@@ -14,6 +14,7 @@ const CardOrder = (() => {
         btnCreditCard.textContent = btnCreditCard.dataset.loadingText;
         validErrBlock.innerHTML = ``
 
+        // FIXME: "billing_same_as_shipping_address":  / use_default_shipping_address / use_default_billing_address
         const orderData = {
             "user": {
                 "first_name": data.first_name,
@@ -22,10 +23,10 @@ const CardOrder = (() => {
             },
             "lines": lineArr,
 
-            "use_default_shipping_address": false,
+            // "use_default_shipping_address": false,
 
-            "use_default_billing_address": false,
-            "billing_same_as_shipping_address": data.billing_same_as_shipping_address,
+            // "use_default_billing_address": false,
+            // "billing_same_as_shipping_address": data.billing_same_as_shipping_address,
             "payment_detail": {
                 "payment_method": data.payment_method,
                 "card_token": 'test_card',
@@ -42,6 +43,18 @@ const CardOrder = (() => {
             },
             "shipping_method": data.shipping_method,
             "success_url": campaign.nextStep(nextURL)
+        }
+
+        if(chkBxBillingAddress.checked == false){
+            orderData["billing_address"] = {
+                    "first_name": data.billing_first_name,
+                    "last_name": data.billing_last_name,
+                    "line1": data.billing_address_line1,
+                    "line4": data.billing_address_line4,
+                    "state": data.billing_state,
+                    "postcode": data.billing_postcode,
+                    "country": data.billing_country
+            };
         }
 
 
@@ -77,7 +90,7 @@ const CardOrder = (() => {
                 let error = result.postcode;
                 validErrBlock.innerHTML = `
                 <div class="alert alert-danger">
-                    API Response Error: ${error}
+                    API Response Error: ${error}billing_first_name
                 </div>
             `;
                 return;

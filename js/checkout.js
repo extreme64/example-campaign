@@ -6,6 +6,10 @@ let lineArr = [];
 const formEl = document.querySelector('.form');
 const firstName = document.querySelector("#id_first_name");
 const lastName = document.querySelector("#id_last_name");
+
+const billingFirstName = document.querySelector("#id_billing_first_name");
+const billingLastName = document.querySelector("#id_billing_last_name");
+
 const email = document.querySelector("#id_email");
 const expMonth = document.getElementById("id_expiry_month");
 const expYear = document.getElementById("id_expiry_year");

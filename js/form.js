@@ -261,10 +261,19 @@ function submitPaymentForm() {
     cardErrBlock.innerHTML = '';
     // Get required, non-sensitive, values from host page
     const requiredFields = {};
-    requiredFields.first_name = firstName.value;
-    requiredFields["last_name"] = lastName.value;
+    
+    if(chkBxBillingAddress.checked) {
+        requiredFields.first_name = firstName.value;
+        requiredFields["last_name"] = lastName.value;
+    }else {
+        requiredFields.first_name = billingFirstName.value;
+        requiredFields["last_name"] = billingLastName.value;
+    }
+    
     requiredFields.month = expMonth.value;
     requiredFields.year = expYear.value;
+
+
 
     Spreedly.tokenizeCreditCard(requiredFields);
 
