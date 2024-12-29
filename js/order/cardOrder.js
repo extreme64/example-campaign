@@ -14,7 +14,6 @@ const CardOrder = (() => {
         btnCreditCard.textContent = btnCreditCard.dataset.loadingText;
         validErrBlock.innerHTML = ``
 
-        // FIXME: "billing_same_as_shipping_address":  / use_default_shipping_address / use_default_billing_address
         const orderData = {
             "user": {
                 "first_name": data.first_name,
@@ -22,11 +21,9 @@ const CardOrder = (() => {
                 "email": data.email,
             },
             "lines": lineArr,
-
-            // "use_default_shipping_address": false,
-
-            // "use_default_billing_address": false,
-            // "billing_same_as_shipping_address": data.billing_same_as_shipping_address,
+            "use_default_billing_address": false,
+            "use_default_shipping_address": false,
+            "billing_same_as_shipping_address": chkBxBillingAddress.checked,
             "payment_detail": {
                 "payment_method": data.payment_method,
                 "card_token": 'test_card',
