@@ -128,6 +128,9 @@ const publicKey = config.publicKey;
 const nextURL = config.nextUrlThankYou;
 const refId = sessionStorage.getItem('ref_id');
 
+// TODO: Add laoding spinner
+// TODO: Load ALL !!! order info into the template
+
 //  TODO: Idea, get this from API endpoints
 // e.g. https://campaigns.apps.29next.com/api/v1/packages/{id}/upsells/
 const upsellLineItem = [{
@@ -136,6 +139,7 @@ const upsellLineItem = [{
 }]
 </script>
 <script type="text/javascript" src="js/campaign.js"></script>
-<script type="text/javascript" src="js/upsell.js"></script>
-
+<script type="text/javascript" src="js/upsell/upsellItem.js"></script>
+<!-- <script type="text/javascript" src="js/upsell.js"></script> -->
+<script type="text/javascript" src="js/upsell/upsellService.js"></script>
 </html>
