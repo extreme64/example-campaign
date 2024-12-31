@@ -4,9 +4,9 @@ const btnUpsell = document.querySelector('.btn-success')
  * Get Order Details for Upsell page
 */
 const getOrder = async () => {
-    console.log ("get order");
+    console.log("get order");
     try {
-        
+
         const response = await fetch((ordersURL + refId + '/'), {
             method: 'GET',
             headers,
@@ -16,11 +16,11 @@ const getOrder = async () => {
         if (!response.ok) {
             console.log('Something went wrong');
             return;
-        } 
+        }
 
         if (result.supports_post_purchase_upsells === false) {
             window.location.href = campaign.skipSteps(confirmationURL)
-        } 
+        }
 
         console.log(result);
 
@@ -32,13 +32,58 @@ const getOrder = async () => {
 const retrieveOrder = campaign.once(getOrder);
 
 
+const upsells = async () => {
+    console.log("get usell items");
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': publicKey
+    }
+
+    let items
+
+    try {
+        const response = await fetch(campaignRetrieveURL, {
+            method: 'GET',
+            headers,
+        });
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            return;
+        }
+
+        items = data.packages.reduce((accumulator, item) => {
+            if (item.external_id === 3 || item.external_id === 4) {
+                accumulator.push(item);
+            }
+            return accumulator;
+        }, []);
+
+        if (!response.ok) {
+            console.log('Something went wrong');
+            return;
+        }
+
+    } catch (error) {
+
+    }
+
+    console.log('ups', items);
+
+    return items;
+}
+
+
 /**
  * Create Upsell
 */
 const createUpsell = async () => {
-    console.log ("create upsell");
-    const orderData = {    
-      "lines": upsellLineItem
+    console.log("create upsell");
+    //TODO: get data from selected UPSELL
+    const orderData = {
+        "lines": upsellLineItem
     }
 
     btnUpsell.disabled = true;
@@ -57,7 +102,7 @@ const createUpsell = async () => {
             btnUpsell.disabled = false;
             btnUpsell.textContent = btnUpsell.dataset.text;
             return;
-        } 
+        }
         console.log(result);
         location.href = campaign.nextStep(nextURL);
 
@@ -66,9 +111,22 @@ const createUpsell = async () => {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function (event) {
 
     retrieveOrder();
+
+    const upsellOptionItems = upsells();
+
+    upsellOptionItems.then(data => {
+
+        UpsellItem.render(data);
+        
+    });
+
+
+
+
+    //TODO: add addEventListener to all buttons
 
     const sendUpsell = campaign.once(createUpsell);
 
@@ -77,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     btnUpsell.addEventListener('click', clickHandler);
-    
+
     [...document.getElementsByClassName('upsell-no')].forEach(anchor => {
         anchor.href = campaign.nextStep(nextURL);
     });
