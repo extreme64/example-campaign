@@ -81,8 +81,8 @@ const campaign = (() => {
                         selectedItems.forEach(item => {
                             item.classList.remove('selected');
                         });
-                        // TODO:
-                        // set value//class
+
+                        // TODO: set value//class
 
                         offer.classList.add('selected');
 
@@ -150,15 +150,17 @@ const campaign = (() => {
         return url.href
     };
 
+    // FIXME: repalce all usafe from Utils and remove this
+    // TODO: All API calls with once()
     // Fire a function only once
-    const once = fn => {
-        let called = false;
-        return function (...args) {
-            if (called) return;
-            called = true;
-            return fn.apply(this, args);
-        };
-    };
+    // const once = fn => {
+    //     let called = false;
+    //     return function (...args) {
+    //         if (called) return;
+    //         called = true;
+    //         return fn.apply(this, args);
+    //     };
+    // };
 
     const currency = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -170,7 +172,7 @@ const campaign = (() => {
         getCampaignData, 
         nextStep, 
         skipSteps, 
-        once, 
+        // once, 
         currency 
     };
     
