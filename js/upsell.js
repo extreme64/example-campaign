@@ -85,6 +85,9 @@ const createUpsell = async () => {
     const orderData = {
         "lines": upsellLineItem
     }
+    
+    console.log(btnUpsell.dataset);
+    
 
     btnUpsell.disabled = true;
     btnUpsell.textContent = btnUpsell.dataset.loadingText;
