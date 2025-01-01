@@ -1,6 +1,6 @@
 const UpsellService = (function () {
 
-    const btnUpsell = document.querySelector('.btn-success');
+  
 
     let upsellOptionItems;
 
@@ -21,6 +21,7 @@ const UpsellService = (function () {
                 return;
             }
 
+            // FIXME: mote out of method into its caller
             if (result.supports_post_purchase_upsells === false) {
                 window.location.href = campaign.skipSteps(confirmationURL);
             }
@@ -32,7 +33,7 @@ const UpsellService = (function () {
         }
     };
 
-    const retrieveOrder = campaign.once(getOrder);
+    // const retrieveOrder = Utils.once(getOrder);
 
     /**
      * Fetch Upsell Items
@@ -59,9 +60,8 @@ const UpsellService = (function () {
                 return;
             }
 
-            //TODO: extract external_id [] in ome setup/config
             items = data.packages.reduce((accumulator, item) => {
-                if (item.external_id === 3 || item.external_id === 4) {
+                if (config.campaignUpsellsIds.includes(item.external_id)) {
                     accumulator.push(item);
                 }
                 return accumulator;
@@ -76,28 +76,37 @@ const UpsellService = (function () {
             console.log(error);
         }
 
-        console.log('ups', items);
         return items;
     };
 
-    const upsellLineItemObj = (upsells) => {
+    const upsellLineItemObjs = (upsells) => {
 
         return upsells.map((item) => {
-            return {
-                "package_id": item.ref_id,
-                "quantity": item.qty
-            }
+            return upsellLineItemObj(item)
         })
+    }
+
+    const upsellLineItemObj = (upsell) => {
+
+        return {
+            "package_id": upsell.ref_id,
+            "quantity": upsell.qty
+        }
     }
 
     /**
      * Process Upsell Order
     */
-    const createUpsell = async () => {
-        console.log("create upsell");
-        //TODO: upsellOptionItems to be fored via selecting UPSELLs in UI
+    const createUpsell = async (data) => {
+        console.log("create upsell", data);
+        
+        const btnUpsell = document.querySelector('.btn-success');
+
         const orderData = {
-            "lines": upsellOptionItems
+            "lines": [{
+                "package_id": data.dataset.ref_id,
+                "quantity": data.dataset.qty
+            }]
         };
 
         btnUpsell.disabled = true;
@@ -134,36 +143,54 @@ const UpsellService = (function () {
         document.addEventListener("DOMContentLoaded", function (event) {
 
             // Retrieve the order details
-            retrieveOrder();
+            // retrieveOrder();
+            Utils.once(getOrder);
 
             // Fetch the upsell items and render them
             upsells().then(data => {
+                
                 if (data && data.length > 0) {
                     UpsellItem.render(data);
                 }
-                upsellOptionItems = upsellLineItemObj(data);
-                console.log(upsellOptionItems);
+                upsellOptionItems = upsellLineItemObjs(data);
+               
+
+
+                const container = document.querySelector(".up-box");
+
+                const noUpsellBtn = document.createElement('div');
+                noUpsellBtn.className = 'upsell-no-wrap row justify-content-center py-3';
+                noUpsellBtn.innerHTML = `
+                    <div class="col py-2">
+                            <a href="#" class="d-flex justify-content-center align-items-center text-secondary upsell-no"> 
+                            No thank you, I don’t want to take advantage of this one-time offer 
+                            </a>
+                    </div>`;
+            
+                container.appendChild(noUpsellBtn);
+    
+                // Add event listeners to upsell-no buttons
+                [...document.getElementsByClassName('upsell-no')].forEach(anchor => {
+                    anchor.href = campaign.nextStep(nextURL);
+                });
+
+
+                // Listen for event 'upsellSelected'
+                document.addEventListener('upsellSelected', function (event) {
+                    const dataset = event.detail;  // Get the upsell data from the event
+                    Utils.once(createUpsell(dataset));
+                
+                });
+
                 
             });
-
-            // Attach event listener for the upsell button
-            const sendUpsell = campaign.once(createUpsell);
-
-            const clickHandler = () => {
-                sendUpsell();
-            };
-
-            btnUpsell.addEventListener('click', clickHandler);
-
-            // Add event listeners to upsell-no buttons
-            [...document.getElementsByClassName('upsell-no')].forEach(anchor => {
-                anchor.href = campaign.nextStep(nextURL);
-            });
+           
         });
     };
 
     return {
-        init
+        init,
+        upsellLineItemObj
     };
 
 })();

@@ -1,5 +1,7 @@
 const UpsellItem = (() => {
 
+    let btnsUpsell;
+
     /**
      * Create Upsell items
      */
@@ -63,9 +65,9 @@ const UpsellItem = (() => {
             item.dataset.name = current.name;
             item.dataset.ref_id = current.ref_id;
             item.dataset.qty = current.qty;
-            
+
             item.innerHTML = template;
-            
+
             item.querySelector("#id_name").textContent = current.name;
             const discount = (current.price_retail_total - current.price_total) / current.price_retail_total * 100;
             item.querySelector("#id_price_diff > .value").textContent = Math.floor(discount);
@@ -75,17 +77,38 @@ const UpsellItem = (() => {
             item.querySelector("#id_price_offer").textContent = campaign.currency.format(current.price_total);
 
 
-           if (current?.shippingPrice == 0) {
+            if (current?.shippingPrice == 0) {
                 item.querySelector("#id_free_shipping").textContent = "Free Shipping In The Same Order";
             } else {
                 item.querySelector("#id_free_shipping").textContent = "";
             }
 
-            container.appendChild(item);
+           
+            item.addEventListener('click', addUpsellHandler);
+            
+
+            container.appendChild(item);          
         }
+
+        
     }
+
+    const addUpsellHandler = (taget) => {
+
+        const btn = taget.currentTarget;
+
+        const upsellEvent = new CustomEvent('upsellSelected', {
+            detail: {
+                "dataset": btn.dataset
+            }
+        });
+
+        document.dispatchEvent(upsellEvent);
+    };
 
     return {
         render
     }
 })();
+
+
