@@ -35,13 +35,13 @@ const offersParentEl = document.querySelectorAll('.offers');
 const summaryShipPrice = document.querySelector(".order-summary-total-value")
 
 
-const retrieveCampaign = campaign.once(campaign.getCampaign);
+const retrieveCampaign = Utils.once(campaign.getCampaign);
 const container = document.querySelector(".offers");
 container.innerHTML = '';
 retrieveCampaign();
 
 
-const sendProspect = campaign.once(Cart.create);
+const sendProspect = Utils.once(Cart.create);
 
 // Billing address cehckbox
 const chkBxBillingAddress = document.getElementById('id_same_as_shipping');
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
                 console.log("Change Line Items:", lineArr);
 
-                Utils.calculateTotal()
+                Cart.calculateTotal()
 
             });
         });
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     console.log("Default Line Items:", lineArr);
-    Utils.calculateTotal()
+    Cart.calculateTotal()
 
 });
 
