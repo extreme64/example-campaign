@@ -150,30 +150,22 @@ const campaign = (() => {
         return url.href
     };
 
-    // FIXME: repalce all usafe from Utils and remove this
-    // TODO: All API calls with once()
-    // Fire a function only once
-    // const once = fn => {
-    //     let called = false;
-    //     return function (...args) {
-    //         if (called) return;
-    //         called = true;
-    //         return fn.apply(this, args);
-    //     };
-    // };
-
     const currency = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
     });
 
+    const removeCurrency = (currencyStr) => {
+        return parseFloat(currencyStr.replace(/[$,]/g, '').trim());
+    }
+
     return { 
         getCampaign, 
         getCampaignData, 
         nextStep, 
-        skipSteps, 
-        // once, 
-        currency 
+        skipSteps,
+        currency,
+        removeCurrency
     };
     
 })();
