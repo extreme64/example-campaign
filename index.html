@@ -41,44 +41,29 @@
                         STEP 1: SELECT PACKAGE
                     </div>
                     <hr class="mt-2">
+
+                    <!-- Offer Bundles -->
                     <div class="offers d-flex flex-column">
                     </div>
+                    <!-- Offer Bundles END -->
+
+                   
+
+                    <!-- Order Summary -->
                     <div class="mb-5">
                         <div class="row align-items-center">
                             <div class="col">
-                                <div class="border bg-white rounded-3 p-4">
-                                    <div class="">
-                                        <div class="h5">Order Summary</div>
-                                    </div>
-                                    <div
-                                        class="d-flex justify-content-between px-3 pt-2 pb-1 border-bottom text-uppercase fs-7">
-                                        <div>Item</div>
-                                        <div>Price</div>
-                                    </div>
-                                    <div class="justify-content-between p-3 d-flex fw-bold">
-                                        <div><span class="selected-product-name">{{package}}</span> </div>
-                                        <div class=" text-secondary"><span class="selected-product-price"></span><span
-                                                class="fs-8"> /ea</span></div>
-                                    </div>
-                                    <div class="rounded-3 p-3 bg-xlight">
-                                        <div class="justify-content-between py-2 d-flex fw-bold">
-                                            <div>Shipping:</div>
-                                            <div><span class="selected-shipping-price text-secondary">FREE</span></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between pt-1">
-                                            <div class=" text-dark fw-bold">Today's Total:</div>
-                                            <div><span
-                                                    class="order-summary-total-value fs-5 text-black fw-bold">0</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="order-summary__comp-wrap border bg-white rounded-3 p-4">
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Order Summary END -->
                 </div>
                 <div id="block--payment_opt1" class="col-12 col-lg-5">
                     <form class="form" novalidate="novalidate">
+                        <!-- TODO: - Are type="hidden" to be utilised?-->
                         <input type="hidden" id="card_token" name="card_token">
                         <input type="hidden" name="payment_method" id="payment_method">
                         <input type="hidden" name="selected_package_id" id="selected_package_id">
@@ -242,6 +227,19 @@
                                     </div>
                                 </div>
                             </div>
+
+                             <!-- Shipping -->
+                            <div class="shipping mb-2">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="shipping__comp-wrap border bg-white rounded-3 p-4">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Shipping END -->
+
                         </div>
                         <div class="step-title">
                             STEP 3: PAYMENT OPTION
@@ -527,11 +525,11 @@
 
     const publicKey = config.publicKey;
     const nextURL = config.nextUrlUpsell;
-    let offers = {
-        priceRetail: 20.00,
-        packages: []
-    }
-    let selectedOfferId = "1";
+    // let offers = {
+    //     priceRetail: 20.00,
+    //     packages: []
+    // }
+    // let selectedOfferId = "2";
 
 </script>
 
