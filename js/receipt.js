@@ -63,7 +63,7 @@ function show(order) {
                     </div>
                     <div class="row justify-content-end row-shipping ">
                         <div class="col-md-4 p-2 text-end">
-                            <div class="summary-order-shipping">Shipping & Handling: <span class="ms-3">${campaign.currency.format(order.shipping_incl_tax)}</span> </div>
+                            <div class="summary-order-shipping">Shipping & Handling: <span class="ms-3">${Campaign.currency.format(order.shipping_incl_tax)}</span> </div>
                         </div>
                     </div>
                     <div class="row justify-content-end row-discounts">
@@ -71,7 +71,7 @@ function show(order) {
                     </div>
                     <div class="row justify-content-end  row-total">
                         <div class="col-md-4 p-2 text-end">
-                            <div class="summary-order-total fw-bold">Total: <span class="ms-3">${campaign.currency.format(order.total_incl_tax)}</span> </div>
+                            <div class="summary-order-total fw-bold">Total: <span class="ms-3">${Campaign.currency.format(order.total_incl_tax)}</span> </div>
                         </div>
                     </div>`;
 
@@ -83,7 +83,7 @@ function show(order) {
     } else {
         rowDiscounts.innerHTML = `
                     <div class="col-md-4 p-2 text-end">
-                            <div class="summary-order-discount text-success">Additional Discounts: <span class="ms-3">- ${campaign.currency.format(order.total_discounts)}</span> </div>
+                            <div class="summary-order-discount text-success">Additional Discounts: <span class="ms-3">- ${Campaign.currency.format(order.total_discounts)}</span> </div>
                         </div>`
     }
 
@@ -142,7 +142,7 @@ function show(order) {
                 <div class="summary-item-qty">${item.quantity}</div>
             </div>
             <div class="col-2 p-2 text-end">
-                <div class="summary-item-total currency" data-item-price="${item.price_incl_tax_excl_discounts}">${campaign.currency.format(item.price_incl_tax_excl_discounts)}</div>
+                <div class="summary-item-total currency" data-item-price="${item.price_incl_tax_excl_discounts}">${Campaign.currency.format(item.price_incl_tax_excl_discounts)}</div>
             </div>
         `;
         orderItem.insertAdjacentHTML('beforeend', orderItemRow)
