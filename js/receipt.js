@@ -165,7 +165,7 @@ function show(order) {
 
     const orderSubTotal = document.querySelector(".summary-order-subtotal-value");
 
-    orderSubTotal.textContent = campaign.currency.format(subTotal);
+    orderSubTotal.textContent = Campaign.currency.format(subTotal);
 
     const orderRefernce = document.querySelector(".order-reference");
     orderRefernce.textContent = orderRef

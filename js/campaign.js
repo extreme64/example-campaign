@@ -1,130 +1,72 @@
-// 
-// Variables
-// 
+//  FIXME: + From global to prop. place
 const campaignRetrieveURL = 'https://campaigns.apps.29next.com/api/v1/campaigns/';
 const cartsCreateURL = 'https://campaigns.apps.29next.com/api/v1/carts/'
 const ordersURL = 'https://campaigns.apps.29next.com/api/v1/orders/'
-
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': publicKey
 }
 
-const confirmationURL = "/thank-you.html";
+const Campaign = (() => {
 
-//
-// Methods
-// 
-const campaign = (() => {
+    const confirmationURL = "/thank-you.html";
 
     /**
      *  Get Campaign
      */
     const getCampaign = async () => {
         
+        
         try {
             const response = await fetch(campaignRetrieveURL, {
                 method: 'GET',
                 headers,
             });
-
+            
             const data = await response.json()
-
+            
             if (!response.ok) {
                 return;
             }
-
-
-            offers = data;
-
+            
+            const shippingContainer = document.querySelector('.shipping__comp-wrap');
+            shippingContainer.appendChild(Shipping.init(data.shipping_methods).render());
+            
+            const orderSummaryContainer = document.querySelector('.order-summary__comp-wrap');
+            orderSummaryContainer.appendChild(OrderSummary.render());
+            
+            offers = getBundles(data);
             getCampaignData(data);
 
-            Packages.renderPackages();
+            const bundlesContainer = document.querySelector(".offers");
+            bundlesContainer.appendChild(Packages.init(offers).render());
 
-           
+        
+            if (!offersParentEl[0]) {
+                return
+            }
+
             const offersNew = offersParentEl[0].querySelectorAll('.offer');
 
             if (offersNew !== undefined) {
 
-                offersNew.forEach((offer, index) => {
-
-                    const pName = data.packages[index].name;
-                    offer.dataset.name = pName;
-
-                    const pPriceEach = data.packages[index].price;
-                    offer.dataset.priceEach = pPriceEach;
-
-                    const pPriceShipping = data.shipping_methods[0].price;
-                    offer.dataset.priceShipping = pPriceShipping;
-
-
-                    offer.dataset.priceTotal = data.packages[index].price_total;
-
-                    const shippingMethod = data.shipping_methods[0].ref_id;
-                    offer.dataset.shippingMethod = shippingMethod;
-
-                    offer.dataset.quantity = data.packages[index].qty;
-
-
-
-                    document.getElementById('shipping_method').value = shippingMethod;
-                    document.querySelector('.selected-product-name').textContent = pName;
-
-                    document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
-
-                    summaryShipPrice.text = pPriceShipping == 0.00 ? "FREE" : campaign.currency.format(pPriceShipping);
-
-                    offer.addEventListener('click', (event) => {
-
-                        // reset other
-                        const selectedItems = offersParentEl[0].querySelectorAll('.selected');
-                        selectedItems.forEach(item => {
-                            item.classList.remove('selected');
-                        });
-
-                        // TODO: set value//class
-
-                        offer.classList.add('selected');
-
-
-                        // let pid = offer.dataset.packageId;
-                        offer.dataset.packageId = data.packages[index].ref_id;
-
-
-                        const pName = data.packages[index].name;
-                        offer.dataset.name = pName;
-
-                        const pPriceEach = data.packages[index].price;
-                        offer.dataset.priceEach = pPriceEach;
-
-                        const pPriceShipping = data.shipping_methods[0].price;
-                        offer.dataset.priceShipping = pPriceShipping;
-
-
-                        offer.dataset.priceTotal = data.packages[index].price_total;
-
-                        const shippingMethod = data.shipping_methods[0].ref_id;
-                        offer.dataset.shippingMethod = shippingMethod;
-
-                        offer.dataset.quantity = data.packages[index].qty;
-
-
-
-                        document.getElementById('shipping_method').value = shippingMethod;
-                        document.querySelector('.selected-product-name').textContent = pName;
-
-                        document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
-
-                        summaryShipPrice.text = pPriceShipping == 0.00 ? "FREE" : campaign.currency.format(pPriceShipping);
-
-                        Cart.calculateTotal()
-
-                    });
+                offersNew.forEach((offer) => {
+                   
                 });
             }
-        
         } catch (error) {
+            console.error(error);
         }
+    }
+
+    const getBundles = (data) => {
+    
+        return data.packages.reduce((accumulator, item) => {
+            if (!config.campaignUpsellsIds.includes(item.external_id)) {
+                accumulator.push(item);
+            }
+            return accumulator;
+        }, []);
     }
 
     const getCampaignData = (data) => {
@@ -146,7 +88,7 @@ const campaign = (() => {
         path = location.pathname.split("/");
         campaignPath = path.slice(0, path.length - 1).join("/");
         base = `${location.protocol}//${location.host}`;
-        url = new URL(campaignPath + confirmationURL, base)
+        url = new URL(campaignPath + config.nextUrlThankYou, base)
         return url.href
     };
 
@@ -159,18 +101,12 @@ const campaign = (() => {
         return parseFloat(currencyStr.replace(/[$,]/g, '').trim());
     }
 
-    return { 
-        getCampaign, 
-        getCampaignData, 
-        nextStep, 
+    return {
+        getCampaign,
+        getCampaignData,
+        nextStep,
         skipSteps,
         currency,
         removeCurrency
     };
-    
 })();
-
-
-
-
-

@@ -73,9 +73,9 @@ const UpsellItem = (() => {
             item.querySelector("#id_price_diff > .value").textContent = Math.floor(discount);
             item.querySelector("#id_item_image").src = current.image;
             item.querySelector("#id_item_image_big").src = current.image;
-            item.querySelector("#id_price_retail").textContent = campaign.currency.format(current.price_retail_total);
-            item.querySelector("#id_price_offer").textContent = campaign.currency.format(current.price_total);
-
+            item.querySelector("#id_price_retail").textContent = Campaign.currency.format(current.price_retail_total);
+            item.querySelector("#id_price_offer").textContent = Campaign.currency.format(current.price_total);
+            item.querySelector("#id_btn_success").dataset.refId = current.ref_id;
 
             if (current?.shippingPrice == 0) {
                 item.querySelector("#id_free_shipping").textContent = "Free Shipping In The Same Order";

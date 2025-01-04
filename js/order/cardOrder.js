@@ -39,7 +39,7 @@ const CardOrder = (() => {
                 "country": data.shipping_country
             },
             "shipping_method": data.shipping_method,
-            "success_url": campaign.nextStep(nextURL)
+            "success_url": Campaign.nextStep(nextURL)
         }
 
         if(chkBxBillingAddress.checked == false){
@@ -138,7 +138,7 @@ const CardOrder = (() => {
 
             if (!result.payment_complete_url && result.number) {
 
-                location.href = campaign.nextStep(nextURL);
+                location.href = Campaign.nextStep(nextURL);
 
             } else if (result.payment_complete_url) {
 
@@ -150,7 +150,6 @@ const CardOrder = (() => {
         }
 
     }
-
 
     return {
         create

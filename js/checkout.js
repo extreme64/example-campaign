@@ -35,7 +35,7 @@ const offersParentEl = document.querySelectorAll('.offers');
 const summaryShipPrice = document.querySelector(".order-summary-total-value")
 
 
-const retrieveCampaign = Utils.once(campaign.getCampaign);
+const retrieveCampaign = Utils.once(Campaign.getCampaign);
 const container = document.querySelector(".offers");
 container.innerHTML = '';
 retrieveCampaign();

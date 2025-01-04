@@ -122,7 +122,7 @@ const UpsellService = (function () {
             }
 
             console.log(result);
-            location.href = campaign.nextStep(nextURL);
+            location.href = Campaign.nextStep(nextURL);
 
         } catch (error) {
             console.log(error);
@@ -144,7 +144,7 @@ const UpsellService = (function () {
             const orderResult = Utils.once(getOrder);
             
             if (orderResult.supports_post_purchase_upsells === false) {
-                window.location.href = campaign.skipSteps(confirmationURL);
+                window.location.href = Campaign.skipSteps(confirmationURL);
             }
             
             // TODO: bkear into parts UI and EVENT
@@ -172,7 +172,7 @@ const UpsellService = (function () {
 
                 // Add event listeners to upsell-no buttons
                 [...document.getElementsByClassName('upsell-no')].forEach(anchor => {
-                    anchor.href = campaign.nextStep(nextURL);
+                    anchor.href = Campaign.nextStep(nextURL);
                 });
 
 

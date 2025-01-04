@@ -55,8 +55,7 @@ const Packages = (() => {
             item.innerHTML = template;
             item.querySelector(".offer-title-text").textContent = package.name;
             item.querySelector(".p-image").src = package.image;
-            item.querySelector(".price-each-retail").textContent = campaign.currency.format(package.price_retail);
-
+            item.querySelector(".price-each-retail").textContent = Campaign.currency.format(package.price_retail_total);
 
             // prices
             const priceElement = item.querySelector('.price-each');
