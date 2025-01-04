@@ -1,3 +1,4 @@
+
 const UpsellService = (function () {
 
     let upsellOptionItems;
@@ -22,7 +23,7 @@ const UpsellService = (function () {
             console.log(result);
 
             return result;
-
+            const UpsellItem = require("./upsellItem");
         } catch (error) {
             console.log(error);
         }
@@ -94,17 +95,12 @@ const UpsellService = (function () {
     const createUpsell = async (data) => {
         console.log("create upsell", data);
 
-        const btnUpsell = document.querySelector('.btn-success');
-
         const orderData = {
             "lines": [{
-                "package_id": data.dataset.ref_id,
+                "package_id": data.dataset.refId,
                 "quantity": data.dataset.qty
             }]
         };
-
-        btnUpsell.disabled = true;
-        btnUpsell.textContent = btnUpsell.dataset.loadingText;
 
         try {
             const response = await fetch((ordersURL + refId + '/upsells/'), {
@@ -116,8 +112,14 @@ const UpsellService = (function () {
 
             if (!response.ok) {
                 console.log('Something went wrong');
-                btnUpsell.disabled = false;
-                btnUpsell.textContent = btnUpsell.dataset.text;
+                const btnUpsells = document.querySelectorAll(UpsellItem.successButtonSelector);
+                btnUpsells.forEach(btn => {
+                    if (btn.dataset.refId == data.dataset.refId) {
+                        btn.disabled = false;
+                        btn.textContent = btn.dataset.loadingText;
+                    }
+                });
+
                 return;
             }
 
@@ -129,8 +131,6 @@ const UpsellService = (function () {
         }
     };
 
-    // const retrieveOrder = Utils.once(getOrder);
-
     /**
      * Initialize the upsell manager
     */
@@ -138,16 +138,12 @@ const UpsellService = (function () {
 
         document.addEventListener("DOMContentLoaded", function (event) {
             
-            // Retrieve the order details
-            // retrieveOrder();
-            
             const orderResult = Utils.once(getOrder);
             
             if (orderResult.supports_post_purchase_upsells === false) {
                 window.location.href = Campaign.skipSteps(confirmationURL);
             }
             
-            // TODO: bkear into parts UI and EVENT
             // Fetch the upsell items and render them
             upsells().then(data => {
 
