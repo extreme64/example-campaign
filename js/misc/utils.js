@@ -1,4 +1,3 @@
-// FIXME:move out of order folder
 const Utils = (() => {
 
      // Fire a function only once
@@ -11,10 +10,11 @@ const Utils = (() => {
         };
     };
 
-
     return {
-        // calculateTotal,
         once
     }
-
 })()
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Utils;
+}
