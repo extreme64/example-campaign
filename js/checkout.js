@@ -48,95 +48,11 @@ const chkBxBillingAddress = document.getElementById('id_same_as_shipping');
 
 const billingAddressFormPArt = document.getElementById('form-billing');
 billingAddressFormPArt.style.display = 'none';
+
+
 // 
 // Inits & Event Listeners
 // 
-document.addEventListener("DOMContentLoaded", (event) => {
-
-    Packages.renderPackages();
-
-    const firstLineItem = { package_id: selectedOfferId, quantity: 1, is_upsell: false };
-
-    lineArr.push(firstLineItem);
-
-    const summaryShipPrice = document.querySelector('.selected-shipping-price');
-
-    const $offer = document.querySelectorAll('.offer');
-
-    if ($offer) {
-
-        $offer.forEach((el, key) => {
-
-            el.addEventListener('click', function () {
-
-                el.classList.toggle("selected");
-
-                const pid = el.dataset.packageId;
-
-                const pName = el.dataset.name;
-
-                const pPriceEach = el.dataset.priceEach;
-
-                const pPriceShipping = el.dataset.priceShipping;
-
-                const shippingMethod = el.dataset.shippingMethod;
-
-                const pQuantity = el.dataset.quantity;
-
-                document.getElementById('shipping_method').value = shippingMethod;
-                document.querySelector('.selected-product-name').textContent = pName;
-
-                document.querySelector('.selected-product-price').textContent = campaign.currency.format(pPriceEach);
-
-                summaryShipPrice.text = pPriceShipping == 0.00 ? "FREE" : campaign.currency.format(pPriceShipping);
-
-                $offer.forEach((ell, els) => {
-                    if (key !== els) {
-                        ell.classList.remove('selected');
-                    }
-
-                });
-
-                firstLineItem.package_id = pid
-
-
-                console.log("Change Line Items:", lineArr);
-
-                Cart.calculateTotal()
-
-            });
-        });
-    }
-
-
-    // initial package setup
-    for (const offer of $offer) {
-
-        packageId = offer.dataset.packageId;
-        shippingId = offer.dataset.shippingMethod;
-        
-        if (packageId === selectedOfferId) {
-            offer.classList.add('selected');
-            offer.style.order = '-1';
-
-            document.getElementById('shipping_method').value = shippingId;
-            document.querySelector('.selected-product-name').textContent = offer.dataset.name;
-            document.querySelector('.selected-product-price').textContent = campaign.currency.format(offer.dataset.priceEach);
-            
-            if (offer.dataset.priceShipping != 0.00) {
-                summaryShipPrice.textContent = campaign.currency.format(offer.dataset.priceShipping);
-            } else {
-                summaryShipPrice.textContent = "FREE";
-            }
-        }
-    }
-
-    console.log("Default Line Items:", lineArr);
-    Cart.calculateTotal()
-
-});
-
-
 firstName.addEventListener('blur', Prospect.create);
 lastName.addEventListener('blur', Prospect.create);
 email.addEventListener('blur', Prospect.create);
