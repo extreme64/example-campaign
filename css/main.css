@@ -13650,11 +13650,11 @@ body {
 }
 .offer.selected {
   background: #fff;
-  pointer-events: none;
+  /* pointer-events: none;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
-          user-select: none;
+          user-select: none; */
   border: 1px solid #30bd51;
 }
 .offer.selected .offer-header {
