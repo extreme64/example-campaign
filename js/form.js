@@ -165,6 +165,16 @@ validate
         Spreedly.validate();
     });
 
+document.addEventListener(Packages.events.componentLoaded, (event) => {
+    validate.addField('#id_shipping_types', [{
+            validator: (value) => {
+                return value !== undefined && value > 0;
+            },
+            errorMessage: 'Shipping type is required',
+        },], {
+            errorsContainer: '.invalid-shipping_types',
+        })
+    });
 
 
 chkBxBillingAddress.addEventListener('change', event => {
@@ -235,6 +245,7 @@ chkBxBillingAddress.addEventListener('change', event => {
 
     })
 })
+
 
 
 /**

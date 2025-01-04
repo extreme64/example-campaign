@@ -13670,6 +13670,11 @@ body {
 .offer-content-img {
   max-width: 130px;
 }
+
+#id_shipping_types option {
+  text-transform: capitalize;
+}
+
 @media (min-width: 768px) {
   .offer-content-img {
     max-width: 300px;
