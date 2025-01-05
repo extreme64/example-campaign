@@ -1,9 +1,10 @@
 const Shipping = (() => {
 
     const shippingTypeChangeEventName = "shippingTypeChange";
-    const defaultSelectedindex = 1;
+    const defaultSelectedIndex = 1;
 
     let block;
+    let defaultSelectedPrice = null;
 
     const template =`
         <div class="">
@@ -58,6 +59,25 @@ const Shipping = (() => {
         };
     }
 
+    const setShippingSelector = (element, types) => {
+        let options = '';
+
+        for (const type of types) {
+            options += `<option value="${type.ref_id}" data-price="${type.price}">${type.code}</option>`
+            if(type.ref_id === defaultSelectedIndex) { defaultSelectedPrice = type.price; }
+        }
+        element.innerHTML += options
+        
+        element.value = defaultSelectedIndex;
+
+        const event = new CustomEvent(Shipping.shippingTypeChangeEventName, {
+            detail: {
+                price: defaultSelectedPrice
+            }
+          });
+        document.dispatchEvent(event);
+    }
+
     const init = (shippingTypes) => {
 
         block = document.createElement("div");
@@ -66,12 +86,8 @@ const Shipping = (() => {
 
         const selector = block.querySelector("#id_shipping_types");
 
-        let options = '';
-        for (const type of shippingTypes) {
-            options += `<option value="${type.ref_id}" data-price="${type.price}">${type.code}</option>`
-        }
-        selector.innerHTML += options
-        selector.value = defaultSelectedindex;
+        setShippingSelector(selector, shippingTypes);
+
         const selectedShippingPrice = block.querySelector('[data-shipping-price-value]')
         selectedShippingPrice.textContent = '...';
         

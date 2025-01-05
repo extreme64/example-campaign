@@ -18,7 +18,7 @@ const OrderSummary = (() => {
         <div class="rounded-3 p-3 bg-xlight">
             <div class="justify-content-between py-2 d-flex fw-bold">
                 <div>Shipping:</div>
-                <div><span class="selected-shipping-price text-secondary">FREE</span></div>
+                <div><span class="selected-shipping-price text-secondary">...</span></div>
             </div>
             <div class="d-flex justify-content-between pt-1">
                 <div class=" text-dark fw-bold">Today's Total:</div>
