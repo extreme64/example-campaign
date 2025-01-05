@@ -1,3 +1,5 @@
+const refId = sessionStorage.getItem('ref_id');
+const orderRef = '"Epic Order"'
 /**
  * Get Order Details for thankyou / receipt page
 */
