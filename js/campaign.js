@@ -1,14 +1,7 @@
-//  FIXME: + From global to prop. place
-const campaignRetrieveURL = 'https://campaigns.apps.29next.com/api/v1/campaigns/';
-const cartsCreateURL = 'https://campaigns.apps.29next.com/api/v1/carts/'
-const ordersURL = 'https://campaigns.apps.29next.com/api/v1/orders/'
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': publicKey
-}
-
 const Campaign = (() => {
 
+
+    const campaignRetrieveURL = 'https://campaigns.apps.29next.com/api/v1/campaigns/';
     const confirmationURL = "/thank-you.html";
 
     /**
@@ -102,6 +95,7 @@ const Campaign = (() => {
     }
 
     return {
+        campaignRetrieveURL,
         getCampaign,
         getCampaignData,
         nextStep,

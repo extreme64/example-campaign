@@ -4,7 +4,7 @@
 const getOrderReceipt = async () => {
     try {
 
-        const response = await fetch((`${ordersURL + refId}/`), {
+        const response = await fetch((`${config.ordersURL + refId}/`), {
             method: 'GET',
             headers
 

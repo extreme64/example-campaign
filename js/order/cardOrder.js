@@ -1,5 +1,5 @@
-const CardOrder = (() => {
 
+const CardOrder = (() => {
 
     /**
      * Use Create Order with Credit Card
@@ -56,7 +56,7 @@ const CardOrder = (() => {
 
 
         try {
-            const response = await fetch(ordersURL, {
+            const response = await fetch(config.ordersURL, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(orderData),

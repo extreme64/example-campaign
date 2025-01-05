@@ -1,5 +1,7 @@
 const Cart = (() => {
 
+    const cartsCreateURL = 'https://campaigns.apps.29next.com/api/v1/carts/'
+
     /**
      *  Create Cart / New Prospect
      */

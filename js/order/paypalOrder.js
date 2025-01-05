@@ -26,7 +26,7 @@ const PaypalOrder = (() => {
         }
 
         try {
-            const response = await fetch(ordersURL, {
+            const response = await fetch(config.ordersURL, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(orderPPData),

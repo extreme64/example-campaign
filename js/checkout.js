@@ -2,6 +2,12 @@
 let lineArr = [];
 
 
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': config.publicKey
+}
+
+
 // form
 const formEl = document.querySelector('.form');
 const firstName = document.querySelector("#id_first_name");

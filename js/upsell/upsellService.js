@@ -9,7 +9,7 @@ const UpsellService = (function () {
     const getOrder = async () => {
         console.log("get order");
         try {
-            const response = await fetch((ordersURL + refId + '/'), {
+            const response = await fetch((config.ordersURL + refId + '/'), {
                 method: 'GET',
                 headers,
             });
@@ -44,7 +44,7 @@ const UpsellService = (function () {
         let items;
 
         try {
-            const response = await fetch(campaignRetrieveURL, {
+            const response = await fetch(Campaign.campaignRetrieveURL, {
                 method: 'GET',
                 headers,
             });
@@ -103,7 +103,7 @@ const UpsellService = (function () {
         };
 
         try {
-            const response = await fetch((ordersURL + refId + '/upsells/'), {
+            const response = await fetch((config.ordersURL + refId + '/upsells/'), {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(orderData),
