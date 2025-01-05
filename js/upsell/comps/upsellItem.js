@@ -105,6 +105,7 @@ const UpsellItem = (() => {
 
     const addUpsellHandler = (taget) => {
         const btn = taget.currentTarget;
+        btn.disabled = true;
         const upsellEvent = new CustomEvent('upsellSelected', {
             detail: {
                 "dataset": btn.dataset
