@@ -1,7 +1,8 @@
 const Prospect = (() => {
 
     /**
-     * Use Create Create cart to capture prospect if email, first, and last names are valid
+     * Use Create Create cart to capture prospect if email, 
+     * first, and last names are valid
      */
     const create = () => {
 

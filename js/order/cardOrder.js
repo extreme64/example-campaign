@@ -1,8 +1,9 @@
-
 const CardOrder = (() => {
 
     /**
-     * Use Create Order with Credit Card
+     * Creates an order using credit card details collected from a form.
+     * On successful order creation, it redirects the user to the next 
+     * step or a payment completion URL.
      */
     const create = async () => {
 

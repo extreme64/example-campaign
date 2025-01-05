@@ -1,4 +1,14 @@
-
+/**
+ * UpsellService is a module that manages upsell operations on an e-commerce platform.
+ * It provides functionalities to fetch order details, retrieve upsell items, process
+ * upsell orders, and initialize the upsell manager.
+ * 
+ * @module UpsellService
+ * 
+ * @function init
+ * @function createUpsell
+ * @function upsellLineItemObj
+ */
 const UpsellService = (function () {
 
     let upsellOptionItems;
@@ -90,8 +100,12 @@ const UpsellService = (function () {
     }
 
     /**
-     * Process Upsell Order
-    */
+     * Asynchronously creates an upsell order using the provided data.
+     * Logs the process and handles errors by re-enabling buttons if the request fails.
+     * Redirects to the next campaign step upon success.
+     *
+     * @param {Object} data - The data object containing upsell details.
+     */
     const createUpsell = async (data) => {
         console.log("create upsell", data);
 
