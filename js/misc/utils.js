@@ -1,14 +1,24 @@
+/**
+ * Utility module providing helper functions.
+ */
 const Utils = (() => {
 
-     // Fire a function only once
+   /**
+    * Wraps a function to ensure it is only executed once.
+    * 
+    * @param {Function} fn - The function to be executed only once.
+    * @returns {Function} A new function that will call the original function only once.
+    */
      const once = fn => {
         let called = false;
+
         return function (...args) {
             if (called) return;
             called = true;
-            return fn.apply(this, args);
+
+            return fn.bind(this)(...args);
         };
-    };
+     };
 
     return {
         once
