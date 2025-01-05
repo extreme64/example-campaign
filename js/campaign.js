@@ -1,8 +1,6 @@
 const Campaign = (() => {
 
-
     const campaignRetrieveURL = 'https://campaigns.apps.29next.com/api/v1/campaigns/';
-    const confirmationURL = "/thank-you.html";
 
     /**
      *  Get Campaign

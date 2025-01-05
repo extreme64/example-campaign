@@ -2,6 +2,12 @@
  * Get Order Details for thankyou / receipt page
 */
 const getOrderReceipt = async () => {
+    
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': config.publicKey
+    }
+
     try {
 
         const response = await fetch((`${config.ordersURL + refId}/`), {

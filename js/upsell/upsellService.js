@@ -3,6 +3,11 @@ const UpsellService = (function () {
 
     let upsellOptionItems;
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': config.publicKey
+    }
+
     /**
      * Fetch Order Details for Upsell page
     */
@@ -35,11 +40,6 @@ const UpsellService = (function () {
     */
     const upsells = async () => {
         console.log("get upsell items");
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': publicKey
-        };
 
         let items;
 
