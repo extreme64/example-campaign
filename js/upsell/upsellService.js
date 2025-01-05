@@ -38,7 +38,6 @@ const UpsellService = (function () {
             console.log(result);
 
             return result;
-            const UpsellItem = require("./upsellItem");
         } catch (error) {
             console.log(error);
         }

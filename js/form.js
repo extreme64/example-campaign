@@ -247,11 +247,9 @@ chkBxBillingAddress.addEventListener('change', event => {
 })
 
 
-
 /**
  * Card Validation with Spreedly iFrame
  */
-
 const style = 'color: #212529; font-size: 1rem; line-height: 1.5; font-weight: 400;width: calc(100% - 20px); height: calc(100% - 2px); position: absolute;padding: 0.13rem .75rem';
 
 // set placeholders and styles for iframe fields to make UI style
@@ -285,9 +283,7 @@ function submitPaymentForm() {
     requiredFields.year = expYear.value;
 
 
-
     Spreedly.tokenizeCreditCard(requiredFields);
-
 }
 
 // handle tokenization errors from spreedly to show to end user
@@ -326,10 +322,10 @@ Spreedly.on('errors', (errors) => {
 
     if (error_html) {
         cardErrBlock.innerHTML = `
-                <div class="alert alert-danger">
-                    ${error_html}
-                </div>
-            `;
+            <div class="alert alert-danger">
+                ${error_html}
+            </div>
+        `;
     }
 
     btnCC.removeAttribute('disabled');
@@ -356,7 +352,6 @@ Spreedly.on('fieldEvent', (name, type, activeEl, inputProperties) => {
             cardErrBlock.innerHTML = ``;
         }
     }
-
 });
 
 Spreedly.on('validation', (inputProperties) => {
@@ -366,10 +361,10 @@ Spreedly.on('validation', (inputProperties) => {
         Spreedly.transferFocus("number");
         numberParent.classList.remove("is-valid");
         cardErrBlock.innerHTML = `
-                    <div class="alert alert-danger">
-                        Please enter a valid card number
-                    </div>
-                `;
+            <div class="alert alert-danger">
+                Please enter a valid card number
+            </div>
+        `;
         return;
     }
     if (inputProperties.validCvv) {
@@ -380,10 +375,10 @@ Spreedly.on('validation', (inputProperties) => {
     Spreedly.transferFocus("cvv");
     cvvParent.classList.remove("is-valid");
     cardErrBlock.innerHTML = `
-                    <div class="alert alert-danger">
-                        Please enter a valid CVV number
-                    </div>
-                `;
+        <div class="alert alert-danger">
+            Please enter a valid CVV number
+        </div>
+    `;
 });
 
 // handle payment method (card token) after successfully created
