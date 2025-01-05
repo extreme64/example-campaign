@@ -33,14 +33,28 @@ const OrderSummary = (() => {
         return block
     }
     
+    /**
+     * Sets up event listeners for the specified target element.
+     *
+     * @param {HTMLElement} target - The DOM element to attach the event listener to.
+     * Listens for the shipping type change event.
+     */
     const setComponentEvents = (target) => {
         target.addEventListener(Shipping.shippingTypeChangeEventName, (event) => {
             selectedShippingPriceEl.textContent = event.detail.price
         });
     }
 
+    /**
+     * Adds a selected bundle to the list of displayed bundles.
+     *
+     * Creates a new HTML element representing
+     * the bundle and appends it to the list of selected bundles.
+     *
+     * @param {Object} bundle - The bundle object containing ref_id, name, and price.
+     */
     const addSelectedBundle = (bundle) => {
-        const {ref_id: refId, name, price} = bundle;
+        const {ref_id: refId, name, price, qty} = bundle;
 
         if(!block){
             return
@@ -53,7 +67,7 @@ const OrderSummary = (() => {
                 <span class="selected-product-name">${name}</span> 
             </div>
             <div class=" text-secondary">
-                <span class="selected-product-price">${price}</span>
+                <span class="selected-product-price">${qty} x ${price}</span>
                 <span class="fs-8"> /ea</span>
             </div>`
 
@@ -67,6 +81,12 @@ const OrderSummary = (() => {
         bundlesListEl.appendChild(itemFragment);
     }
 
+    /**
+     * Removes a selected bundle from the list based on the provided index.
+     *
+     * @param {number} index - The index of the bundle to be removed.
+     * @returns {void} - Does not return a value.
+     */
     const removeSelectedBundle = (index) => {
 
         if(!block){
@@ -78,6 +98,12 @@ const OrderSummary = (() => {
         bundlesListEl.removeChild(childToRemove);
     }
 
+    /**
+     * Initializes the order summary component by creating a new div element,
+     * assigning it a specific class, and setting its inner HTML to the provided template.
+     * It also selects the element displaying the selected shipping price and
+     * sets up event listeners for the component.
+     */
     const init = () => {
 
         block = document.createElement("div");

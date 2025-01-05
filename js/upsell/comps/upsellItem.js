@@ -1,3 +1,19 @@
+/**
+ * Module for creating and managing upsell items in a web interface.
+ * 
+ * This module provides functionality to render upsell items dynamically
+ * based on provided data and handle user interactions with these items.
+ * 
+ * @module UpsellItem
+ * 
+ * @property {string} successButtonSelector - CSS selector for the success button.
+ * 
+ * @function render
+ * @param {Array} items - Array of item objects to be rendered as upsell items.
+ * 
+ * @function addUpsellHandler
+ * @param {Event} taget - Event object triggered by clicking the upsell button.
+ */
 const UpsellItem = (() => {
 
     const successButtonSelector = ".btn-success";

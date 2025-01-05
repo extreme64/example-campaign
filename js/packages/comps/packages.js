@@ -40,7 +40,9 @@ const Packages = (() => {
         </div>`;
 
     /**
-     * Create Packages
+     * Renders bundles list fragment.
+     * 
+     * @returns {DocumentFragment} The constructed document fragment containing all appended items.
      */
     const render = () => {
         const fragment = document.createElement("fragment");
@@ -50,14 +52,22 @@ const Packages = (() => {
         return fragment;
     }
 
-    const offerClickHandler = (event, packageId) => {
-        const offerElement = event.target.closest('.offer');
+    /**
+     * Handles the click event on an offer element, toggling its 'selected' state.
+     * If the offer is selected, it adds the package to the lineArr array.
+     * If the offer is deselected, it removes the package from the lineArr array.
+     *
+     * @param {Event} event - The click event triggered on the offer element.
+     * @param {number} packageId - The ID of the package associated with the offer.
+     */
+    const packageClickHandler = (event, packageId) => {
+        const element = event.target.closest('.offer');
 
-        if (offerElement.classList.contains('selected')) {
-            offerElement.classList.remove('selected');
-            lineArr.splice(parseInt(offerElement.dataset.packageId) - 1, 1);
+        if (element.classList.contains('selected')) {
+            element.classList.remove('selected');
+            lineArr.splice(parseInt(element.dataset.packageId) - 1, 1);
         } else {
-            offerElement.classList.add('selected');
+            element.classList.add('selected');
             lineArr.push({
                 package_id: packageId,
                 is_upsell: false
@@ -65,9 +75,9 @@ const Packages = (() => {
         }
     }
 
-    const init = (offers) => {
+    const init = (packages) => {
 
-        for (const package of offers) {
+        for (const package of packages) {
 
             const item = document.createElement("div");
             
@@ -92,8 +102,6 @@ const Packages = (() => {
             priceElement.textContent = Campaign.currency.format(package.price);
             priceTotalElement.textContent = Campaign.currency.format(package.priceTotal);
 
-            // const truncateByDecimalPlace = (value, numDecimalPlaces) => Math.trunc(value * 10 ** numDecimalPlaces) / 10 ** numDecimalPlaces
-
             if (package.shippingPrice == 0) {
                 item.querySelector(".shipping-cost").textContent = "FREE";
             } else {
@@ -104,19 +112,19 @@ const Packages = (() => {
 
             item.addEventListener('click', (event) => {
 
-                const blockEl = event.target.closest('.offer');
+                const packageEl = event.target.closest('.offer');
                 
-                if(blockEl == undefined){
-                    blockEl =event.target;
+                if(packageEl == undefined){
+                    packageEl =event.target;
                 }
 
-                if(blockEl.classList.contains('selected')){
+                if(packageEl.classList.contains('selected')){
                     OrderSummary.removeSelectedBundle(package.ref_id);
                 }else{
                     OrderSummary.addSelectedBundle(package);
                 }
                 
-                offerClickHandler(event, package.ref_id);
+                packageClickHandler(event, package.ref_id);
                 
                 Cart.calculateTotal();
             });
@@ -124,9 +132,7 @@ const Packages = (() => {
             blocks.push(item);
         }
 
-        const bundleSelectedEvent = new CustomEvent(events.componentLoaded, {
-            detail: {}
-        });
+        const bundleSelectedEvent = new CustomEvent(events.componentLoaded, { detail: {} });
         document.dispatchEvent(bundleSelectedEvent);
 
         return Packages;
