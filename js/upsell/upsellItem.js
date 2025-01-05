@@ -2,7 +2,6 @@ const UpsellItem = (() => {
 
     const successButtonSelector = ".btn-success";
 
-    let btnsUpsell;
     /**
      * Create Upsell items
      */
@@ -58,14 +57,8 @@ const UpsellItem = (() => {
 
         for (const current of items) {
 
-            // const truncateByDecimalPlace = (value, numDecimalPlaces) => Math.trunc(value * 10 ** numDecimalPlaces) / 10 ** numDecimalPlaces
-
             const item = document.createElement("div");
             item.classList.add('upsell-item', 'row');
-
-            // item.dataset.name = current.name;
-            // item.dataset.refId = current.ref_id;
-            // item.dataset.qty = current.qty;
 
             item.innerHTML = template;
 
@@ -84,26 +77,18 @@ const UpsellItem = (() => {
                 item.querySelector("#id_free_shipping").textContent = "";
             }
 
-           
             const btnUpsell = item.querySelector(successButtonSelector);
             btnUpsell.dataset.name = current.name;
             btnUpsell.dataset.refId = current.ref_id;
             btnUpsell.dataset.qty = current.qty;
             btnUpsell.addEventListener('click', addUpsellHandler);
             
-
             container.appendChild(item);          
         }
-
-        
     }
 
     const addUpsellHandler = (taget) => {
-
         const btn = taget.currentTarget;
-        // btn.disabled = true;
-        // btn.textContent = btn.dataset.loadingText; 
-
         const upsellEvent = new CustomEvent('upsellSelected', {
             detail: {
                 "dataset": btn.dataset
