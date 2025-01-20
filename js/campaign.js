@@ -32,7 +32,12 @@ const Campaign = (() => {
             const bundlesContainer = document.querySelector(".offers");
             bundlesContainer.appendChild(Packages.init(offers).render());
 
+            //  Add Extra Products
+            const extendedWarentyContainer = document.querySelector(".extra-product__comp-wrap");
+            extendedWarentyContainer.appendChild(ExtendedWarranty.init().render());
+
         
+
             if (!offersParentEl[0]) {
                 return
             }
