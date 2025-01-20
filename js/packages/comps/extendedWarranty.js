@@ -2,7 +2,9 @@ const ExtendedWarranty = (() => {
 
     let block;
     let isExtendedWarrantyChcked = false;
-  
+    const emitsEventName = {
+        extendedWarrantyClicked: 'extendedWarrantyClicked'};
+
     const template = `
         <input type="checkbox" class="form-check-input" id="id_extended_warranty_product_cbx"
             onclick="" >
