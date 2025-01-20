@@ -53,7 +53,8 @@ const Campaign = (() => {
     const getBundles = (data) => {
     
         return data.packages.reduce((accumulator, item) => {
-            if (!config.campaignUpsellsIds.includes(item.external_id)) {
+            if (!config.campaignUpsellsIds.includes(item.external_id) &&
+                !config.extraProductsId.includes(item.external_id)) {
                 accumulator.push(item);
             }
             return accumulator;
