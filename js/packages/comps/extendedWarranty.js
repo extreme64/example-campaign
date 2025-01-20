@@ -20,14 +20,22 @@ const ExtendedWarranty = (() => {
 
     const render = () => { return block}
 
-
+    const extendedWarrantyClciked = () => {
+        isExtendedWarrantyChcked = block.querySelector('#id_extended_warranty_product_cbx').checked;
+        console.log(
+            emitsEventName.extendedWarrantyClicked, 
+            isExtendedWarrantyChcked
+        );
+    }
 
     const init = () => {
         block = document.createElement("div");
         block.classList.add('extended-warranty-comp');
         block.innerHTML = template;
 
-    
+        block.querySelector('#id_extended_warranty_product_cbx')
+            .addEventListener('click', extendedWarrantyClciked);
+
         return ExtendedWarranty
     }
 
