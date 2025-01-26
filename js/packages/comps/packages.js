@@ -103,8 +103,8 @@ const Packages = (() => {
             }
             
             packageClickHandler(event, package.ref_id);
-            
-            Cart.calculateTotal();
+
+            Cart.calculateTotalWithUpsells();
 
             const bundleSelectedEvent = new CustomEvent(events.selectedItem, { detail: {
                 package:package

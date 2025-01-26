@@ -82,6 +82,8 @@ const ExtendedWarranty = (() => {
                     }
                 }));
 
+                Cart.calculateTotalWithUpsells();
+
                 extendedWarrantyClickedHandler(event, product.ref_id);
             });
 
