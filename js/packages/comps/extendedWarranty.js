@@ -29,8 +29,6 @@ const ExtendedWarranty = (() => {
 
     const extendedWarrantyClickedHandler = (event, packageId) => {
 
-        const element = event.target.closest('.offer');
-
         if (isSelected() === false) {
             let index = lineArr.findIndex(item => item.package_id == packageId);
             lineArr.splice(index, 1);
@@ -42,13 +40,18 @@ const ExtendedWarranty = (() => {
         }
 
         console.log('lineArr', lineArr);
-
     }
 
     const getOneSelectedRefId = () => {
         return oneCreatedRefId;
     }
 
+    const getTotal= (qty) => {
+        if((qty===0 || qty===undefined) || qty===null)
+            return 0;
+
+        return block.dataset.price * qty;
+    }
 
     const init = (product) => {
 
@@ -96,6 +99,7 @@ const ExtendedWarranty = (() => {
     return {
         emitsEventName,
         getOneSelectedRefId,
+        getTotal,
         isSelected,
         render,
         init
