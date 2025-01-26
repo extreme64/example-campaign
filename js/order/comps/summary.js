@@ -1,5 +1,9 @@
 const OrderSummary = (() => {
 
+    const selectors = {
+        withRefIdItem: `.selected-bundles-list t > [data-ref-id="${config.__vphs__}"]`
+    };
+
     let selectedShippingPriceEl;
     let block;
     let selectedBundlesQty = [];
@@ -51,7 +55,15 @@ const OrderSummary = (() => {
 
             if(ExtendedWarranty.isSelected() == true) { 
     
-                const exWarEl = block.querySelector(`.selected-bundles-list > [data-ref-id="${ExtendedWarranty.getOneSelectedRefId()}"]`);
+                const exWarEl = block.querySelector(
+                    `${selectors.withRefIdItem
+                        .replace(config.__vphs__, ExtendedWarranty.getOneSelectedRefId())}
+                `);
+
+                if (!exWarEl) {
+                    return
+                }
+
                 exWarEl.dataset.qty = Cart.getTotalQty();
                 //FIXME text formmat need to be centralised and more clear
                 exWarEl.querySelector('.selected-product-price')
@@ -62,7 +74,6 @@ const OrderSummary = (() => {
         });
 
         target.addEventListener(ExtendedWarranty.emitsEventName.extendedWarrantyClicked, (event) => {
-            console.log('extendedWarrantyClicked', event.detail.package);
 
             const totalQty = selectedBundlesQty.reduce((total, item) => total + item.qty, 0);
             //  console.log('totalQties', totalQty);
@@ -162,6 +173,7 @@ const OrderSummary = (() => {
         addSelectedBundle,
         removeSelectedBundle,
         selectedBundlesQty,
+        selectors,
         render,
         init
     }
