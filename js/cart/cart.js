@@ -42,6 +42,8 @@ const Cart = (() => {
         }
     }
 
+    // TODO: calculateTotal to include 'extended warranty' cost as well (price per x qty)
+
     const calculateTotal = () => {
 
         const orderTotal = document.querySelector(".order-summary-total-value");
@@ -62,9 +64,30 @@ const Cart = (() => {
 
     }
 
+    const getTotalQty = () => {
+
+        const orderTotal = document.querySelector(".order-summary-total-value");
+
+        const selectedPackages = document.querySelectorAll(".offer.selected");
+
+        if(!selectedPackages){
+            return
+        }
+
+
+        const totalQuantity = Array.from(selectedPackages).reduce((total, item) => {
+            return total + parseFloat(item.dataset.quantity);
+        }, 0);
+
+
+        return totalQuantity;
+
+    }
+
     return {
         create,
-        calculateTotal
+        calculateTotal,
+        getTotalQty
     }
 
 })();
