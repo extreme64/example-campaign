@@ -5,5 +5,6 @@ const config = {
     nextUrlThankYou: '/thank-you.html',
     ordersURL: 'https://campaigns.apps.29next.com/api/v1/orders/',
     campaignUpsellsIds: [3,4],
-    extraProductsId: [36]
+    extraProductsId: [36],
+    __vphs__: '__%%%%__',
 };
