@@ -52,6 +52,70 @@ const Packages = (() => {
         return fragment;
     }
 
+    const renderItem = (itemData) => {
+        bundlesContainer = document.querySelector(".offers");
+        return createItemElement(itemData);
+    }
+
+    const createItemElement = (package) => {
+        const item = document.createElement("div");
+            
+        item.classList.add('offer');
+        item.dataset.packageId = package.ref_id;
+        item.dataset.name = package.name;
+        item.dataset.quantity = package.qty;
+        item.dataset.priceTotal = package.price_total;
+        item.dataset.priceEach = package.price;
+
+        item.innerHTML = template;
+
+        item.querySelector(".offer-title-text").textContent = package.name;
+        item.querySelector(".p-image").src = package.image;
+        item.querySelector(".price-each-retail").textContent = Campaign.currency.format(package.price_retail_total);
+
+        // prices
+        const priceElement =item.querySelector('.price-each');
+        const priceTotalElement =item.querySelector('.price-total');
+
+        priceElement.textContent = Campaign.currency.format(package.price);
+        priceTotalElement.textContent = Campaign.currency.format(package.priceTotal);
+
+        if (package.shippingPrice == 0) {
+            item.querySelector(".shipping-cost").textContent = "FREE";
+        } else {
+            item.querySelector(".shipping-cost").textContent = package.shippingPrice;
+            item.querySelector(".offer-content-price-total").style.display = "none"
+        }
+
+
+        item.addEventListener('click', (event) => {
+
+            const packageEl = event.target.closest('.offer');
+            
+            if(packageEl == undefined){
+                packageEl =event.target;
+            }
+
+            if(packageEl.classList.contains('selected')){
+                OrderSummary.removeSelectedBundle(package.ref_id);
+            }else{
+                OrderSummary.addSelectedBundle(package);
+            }
+            
+            packageClickHandler(event, package.ref_id);
+            
+            Cart.calculateTotal();
+
+            const bundleSelectedEvent = new CustomEvent(events.selectedItem, { detail: {
+                package:package
+            } });
+            document.dispatchEvent(bundleSelectedEvent);
+
+        });
+
+        return item;
+    }
+
     /**
      * Handles the click event on an offer element, toggling its 'selected' state.
      * If the offer is selected, it adds the package to the lineArr array.
@@ -65,7 +129,9 @@ const Packages = (() => {
 
         if (element.classList.contains('selected')) {
             element.classList.remove('selected');
-            lineArr.splice(parseInt(element.dataset.packageId) - 1, 1);
+            // refactor to find items index, that has same package_id 
+            let index = lineArr.findIndex(item => item.package_id == packageId);
+            lineArr.splice(index, 1);
         } else {
             element.classList.add('selected');
             lineArr.push({
@@ -78,62 +144,12 @@ const Packages = (() => {
     const init = (packages) => {
 
         for (const package of packages) {
-
-            const item = document.createElement("div");
-            
-            item.classList.add('offer');
-            item.dataset.packageId = package.ref_id;
-            item.dataset.name = package.name;
-            item.dataset.quantity = package.qty;
-            item.dataset.priceTotal = package.price_total;
-            item.dataset.priceEach = package.price;
-            //  item.dataset.priceShipping = package.shippingPrice;
-            //  item.dataset.shippingMethod = package.shippingMethod;
-            item.innerHTML = template;
-
-            item.querySelector(".offer-title-text").textContent = package.name;
-            item.querySelector(".p-image").src = package.image;
-            item.querySelector(".price-each-retail").textContent = Campaign.currency.format(package.price_retail_total);
-
-            // prices
-            const priceElement =item.querySelector('.price-each');
-            const priceTotalElement =item.querySelector('.price-total');
-
-            priceElement.textContent = Campaign.currency.format(package.price);
-            priceTotalElement.textContent = Campaign.currency.format(package.priceTotal);
-
-            if (package.shippingPrice == 0) {
-                item.querySelector(".shipping-cost").textContent = "FREE";
-            } else {
-                item.querySelector(".shipping-cost").textContent = package.shippingPrice;
-                item.querySelector(".offer-content-price-total").style.display = "none"
-            }
-
-
-            item.addEventListener('click', (event) => {
-
-                const packageEl = event.target.closest('.offer');
-                
-                if(packageEl == undefined){
-                    packageEl =event.target;
-                }
-
-                if(packageEl.classList.contains('selected')){
-                    OrderSummary.removeSelectedBundle(package.ref_id);
-                }else{
-                    OrderSummary.addSelectedBundle(package);
-                }
-                
-                packageClickHandler(event, package.ref_id);
-                
-                Cart.calculateTotal();
-            });
-
-            blocks.push(item);
+            createItemElement(package);
+            blocks.push(package);
         }
 
-        const bundleSelectedEvent = new CustomEvent(events.componentLoaded, { detail: {} });
-        document.dispatchEvent(bundleSelectedEvent);
+        const bundlesLoadedEvent = new CustomEvent(events.componentLoaded, { detail: {} });
+        document.dispatchEvent(bundlesLoadedEvent);
 
         return Packages;
     }
@@ -141,6 +157,7 @@ const Packages = (() => {
     return {
         events,
         render,
+        renderItem,
         init
     }
 

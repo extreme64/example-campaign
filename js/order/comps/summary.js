@@ -2,6 +2,7 @@ const OrderSummary = (() => {
 
     let selectedShippingPriceEl;
     let block;
+    let selectedBundlesQty = [];
 
     const template = `
         <div class="">
@@ -32,7 +33,7 @@ const OrderSummary = (() => {
     const render = () => {
         return block
     }
-    
+
     /**
      * Sets up event listeners for the specified target element.
      *
@@ -43,7 +44,42 @@ const OrderSummary = (() => {
         target.addEventListener(Shipping.shippingTypeChangeEventName, (event) => {
             selectedShippingPriceEl.textContent = event.detail.price
         });
+
+        target.addEventListener(Packages.events.selectedItem, (event) => {
+            console.log('selected', event.detail.package);
+
+
+            if(ExtendedWarranty.isSelected() == true) { 
+    
+                const exWarEl = block.querySelector(`.selected-bundles-list > [data-ref-id="${ExtendedWarranty.getOneSelectedRefId()}"]`);
+                exWarEl.dataset.qty = Cart.getTotalQty();
+                //FIXME text formmat need to be centralised and more clear
+                exWarEl.querySelector('.selected-product-price')
+                    .textContent = `${Cart.getTotalQty()} x ${exWarEl.querySelector('.selected-product-price')
+                        .textContent.split(' x ')[1]}`;
+            }
+
+        });
+
+        target.addEventListener(ExtendedWarranty.emitsEventName.extendedWarrantyClicked, (event) => {
+            console.log('extendedWarrantyClicked', event.detail.package);
+
+            const totalQty = selectedBundlesQty.reduce((total, item) => total + item.qty, 0);
+            //  console.log('totalQties', totalQty);
+            const product = event.detail.product;
+            product.qty = totalQty;
+
+
+            if (ExtendedWarranty.isSelected() == true) {
+                addSelectedBundle(product);
+            } else {
+                removeSelectedBundle(event.detail.product.ref_id);
+            }
+        });
+
     }
+
+
 
     /**
      * Adds a selected bundle to the list of displayed bundles.
@@ -54,12 +90,14 @@ const OrderSummary = (() => {
      * @param {Object} bundle - The bundle object containing ref_id, name, and price.
      */
     const addSelectedBundle = (bundle) => {
-        const {ref_id: refId, name, price, qty} = bundle;
+        const { ref_id: refId, name, price, qty } = bundle;
 
-        if(!block){
+        if (!block) {
             return
         }
-        
+
+        selectedBundlesQty.push({ refId: refId, qty: qty });
+
         const bundlesListEl = block.querySelector(".selected-bundles-list");
 
         const itemTemplate = `
@@ -76,9 +114,11 @@ const OrderSummary = (() => {
         itemFragment.classList.add('w-100');
         itemFragment.classList.add('justify-content-between');
         itemFragment.dataset.refId = refId;
+        itemFragment.dataset.qty = qty;
         itemFragment.innerHTML = itemTemplate;
 
         bundlesListEl.appendChild(itemFragment);
+
     }
 
     /**
@@ -89,9 +129,11 @@ const OrderSummary = (() => {
      */
     const removeSelectedBundle = (index) => {
 
-        if(!block){
+        if (!block) {
             return
         }
+
+        selectedBundlesQty = selectedBundlesQty.filter(item => item.refId !== index);
 
         const bundlesListEl = block.querySelector(".selected-bundles-list");
         const childToRemove = block.querySelector(`[data-ref-id='${index}']`);
@@ -111,13 +153,15 @@ const OrderSummary = (() => {
         block.innerHTML = template;
 
         selectedShippingPriceEl = block.querySelector('.selected-shipping-price');
-        
+
         setComponentEvents(document);
     }
+
 
     return {
         addSelectedBundle,
         removeSelectedBundle,
+        selectedBundlesQty,
         render,
         init
     }

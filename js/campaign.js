@@ -1,3 +1,5 @@
+// const { config } = require("dotenv");
+
 const Campaign = (() => {
 
     const campaignRetrieveURL = 'https://campaigns.apps.29next.com/api/v1/campaigns/';
@@ -29,13 +31,11 @@ const Campaign = (() => {
             offers = getBundles(data);
             getCampaignData(data);
 
-            const bundlesContainer = document.querySelector(".offers");
-            bundlesContainer.appendChild(Packages.init(offers).render());
 
-            //  Add Extra Products
-            const extendedWarentyContainer = document.querySelector(".extra-product__comp-wrap");
-            extendedWarentyContainer.appendChild(ExtendedWarranty.init().render());
-
+            Packages.init(offers)
+       
+            PackagesService.init();
+            PackagesService.renderItems(data.packages);
         
 
             if (!offersParentEl[0]) {

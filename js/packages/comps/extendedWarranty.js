@@ -1,9 +1,14 @@
 const ExtendedWarranty = (() => {
 
+    const emitsEventName = {
+        extendedWarrantyClicked: 'extendedWarrantyClicked'
+    };
+    const isOnlyOne = true;
+    let isOneCreated = false;
+    let oneCreatedRefId = null;
+
     let block;
     let isExtendedWarrantyChcked = false;
-    const emitsEventName = {
-        extendedWarrantyClicked: 'extendedWarrantyClicked'};
 
     const template = `
         <input type="checkbox" class="form-check-input" id="id_extended_warranty_product_cbx"
@@ -18,23 +23,69 @@ const ExtendedWarranty = (() => {
         </p>
     `;
 
-    const render = () => { return block}
+    const render = () => { return block }
 
-    const extendedWarrantyClciked = () => {
-        isExtendedWarrantyChcked = block.querySelector('#id_extended_warranty_product_cbx').checked;
-        console.log(
-            emitsEventName.extendedWarrantyClicked, 
-            isExtendedWarrantyChcked
-        );
+    const isSelected = () => { return isExtendedWarrantyChcked }
+
+    const extendedWarrantyClickedHandler = (event, packageId) => {
+
+        const element = event.target.closest('.offer');
+
+        if (isSelected() === false) {
+            let index = lineArr.findIndex(item => item.package_id == packageId);
+            lineArr.splice(index, 1);
+        } else {
+            lineArr.push({
+                package_id: packageId,
+                is_upsell: true
+            })
+        }
+
+        console.log('lineArr', lineArr);
+
     }
 
-    const init = () => {
+    const getOneSelectedRefId = () => {
+        return oneCreatedRefId;
+    }
+
+
+    const init = (product) => {
+
+        if(isOneCreated) return ExtendedWarranty;
+
+        oneCreatedRefId = product.ref_id;
+
         block = document.createElement("div");
         block.classList.add('extended-warranty-comp');
+
+        block.dataset.packageId = product.ref_id;
+        block.dataset.externalId = product.external_id;
+        block.dataset.refId = product.ref_id;
+        block.dataset.price = product.price;
+        block.dataset.name = product.name;
+        block.dataset.qty = product.qty;
+
+        block.dataset.isOnlyOne = isOnlyOne;
+
         block.innerHTML = template;
 
+        console.log(product);
+
+
         block.querySelector('#id_extended_warranty_product_cbx')
-            .addEventListener('click', extendedWarrantyClciked);
+            .addEventListener('click', function (event) {
+                isExtendedWarrantyChcked = !isExtendedWarrantyChcked;
+                document.dispatchEvent(new CustomEvent(emitsEventName.extendedWarrantyClicked, {
+                    detail: {
+                        product
+                    }
+                }));
+
+                extendedWarrantyClickedHandler(event, product.ref_id);
+            });
+
+        isOneCreated = true;
 
         return ExtendedWarranty
     }
@@ -42,6 +93,8 @@ const ExtendedWarranty = (() => {
 
     return {
         emitsEventName,
+        getOneSelectedRefId,
+        isSelected,
         render,
         init
     }
