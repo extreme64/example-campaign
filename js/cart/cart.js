@@ -61,7 +61,32 @@ const Cart = (() => {
 
 
         orderTotal.textContent = Campaign.currency.format(totalPrice);
+    }
 
+
+
+
+    const calculateTotalWithUpsells = () => {
+
+        const orderTotal = document.querySelector(".order-summary-total-value");
+
+        const selectedPackages = document.querySelectorAll(".offer.selected");
+
+        if(!selectedPackages){
+            return
+        }
+
+
+        const totalPrice = Array.from(selectedPackages).reduce((total, item) => {
+            return total + parseFloat(item.dataset.priceTotal);
+        }, 0);
+
+        let ewt = 0;
+        if(ExtendedWarranty.isSelected() == true){
+            ewt = ExtendedWarranty.getTotal(getTotalQty());
+        } 
+
+        orderTotal.textContent = Campaign.currency.format(totalPrice + ewt);
     }
 
     const getTotalQty = () => {
@@ -87,6 +112,7 @@ const Cart = (() => {
     return {
         create,
         calculateTotal,
+        calculateTotalWithUpsells,
         getTotalQty
     }
 
