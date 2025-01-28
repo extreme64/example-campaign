@@ -76,7 +76,6 @@ const OrderSummary = (() => {
         target.addEventListener(ExtendedWarranty.emitsEventName.extendedWarrantyClicked, (event) => {
 
             const totalQty = selectedBundlesQty.reduce((total, item) => total + item.qty, 0);
-            //  console.log('totalQties', totalQty);
             const product = event.detail.product;
             product.qty = totalQty;
 
@@ -111,6 +110,7 @@ const OrderSummary = (() => {
 
         const bundlesListEl = block.querySelector(".selected-bundles-list");
 
+        // TODO: repalce tempalte "q x p'
         const itemTemplate = `
             <div>
                 <span class="selected-product-name">${name}</span> 

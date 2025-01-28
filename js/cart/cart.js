@@ -11,8 +11,6 @@ const Cart = (() => {
         const formData = new FormData(formEl);
         const data = Object.fromEntries(formData);
 
-        console.log(data);
-
         const cartData = {
             "user": {
                 "first_name": data.first_name,
@@ -42,8 +40,6 @@ const Cart = (() => {
         }
     }
 
-    // TODO: calculateTotal to include 'extended warranty' cost as well (price per x qty)
-
     const calculateTotal = () => {
 
         const orderTotal = document.querySelector(".order-summary-total-value");
@@ -62,9 +58,6 @@ const Cart = (() => {
 
         orderTotal.textContent = Campaign.currency.format(totalPrice);
     }
-
-
-
 
     const calculateTotalWithUpsells = () => {
 
@@ -91,6 +84,7 @@ const Cart = (() => {
 
     const getTotalQty = () => {
 
+        // FIXME: This line is not used anywhere
         const orderTotal = document.querySelector(".order-summary-total-value");
 
         const selectedPackages = document.querySelectorAll(".offer.selected");
