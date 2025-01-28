@@ -1,8 +1,12 @@
 const OrderSummary = (() => {
 
     const selectors = {
-        withRefIdItem: `.selected-bundles-list t > [data-ref-id="${config.__vphs__}"]`
+        withRefIdItem: `.selected-bundles-list > [data-ref-id='${config.__vphs__}']`
     };
+    
+    const subTempaltes = {
+        price: `${config.__vphs__} x ${config.__vphs__}` 
+    }             
 
     let selectedShippingPriceEl;
     let block;
@@ -55,20 +59,19 @@ const OrderSummary = (() => {
 
             if(ExtendedWarranty.isSelected() == true) { 
     
-                const exWarEl = block.querySelector(
-                    `${selectors.withRefIdItem
-                        .replace(config.__vphs__, ExtendedWarranty.getOneSelectedRefId())}
-                `);
+                const str = selectors.withRefIdItem.replace(config.__vphs__, ExtendedWarranty.getOneSelectedRefId())
+                const exWarEl = block.querySelector(`${str}`);
 
                 if (!exWarEl) {
                     return
                 }
 
-                exWarEl.dataset.qty = Cart.getTotalQty();
-                //FIXME text formmat need to be centralised and more clear
+                const quantity = Cart.getTotalQty();
+                exWarEl.dataset.qty = quantity;
+                const price = exWarEl.querySelector('.selected-product-price').textContent.split(' x ')[1];
+
                 exWarEl.querySelector('.selected-product-price')
-                    .textContent = `${Cart.getTotalQty()} x ${exWarEl.querySelector('.selected-product-price')
-                        .textContent.split(' x ')[1]}`;
+                        .textContent = Utils.patternf(subTempaltes.price, quantity, price)
             }
 
         });
