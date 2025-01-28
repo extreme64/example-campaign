@@ -40,7 +40,22 @@ const CardOrder = (() => {
                 "country": data.shipping_country
             },
             "shipping_method": data.shipping_method,
-            "success_url": Campaign.nextStep(nextURL)
+            "success_url": Campaign.nextStep(nextURL),
+        }
+
+        try {
+            if(ExtendedWarranty.isSelected()){
+                if (!orderData.attribution) {
+    
+                    orderData.attribution = {
+                        "metadata": {
+                            "extended_warranty": true
+                        } 
+                    };
+                }
+            }
+        } catch (error) {
+            console.log('Error adding metadata', error);
         }
 
         if(chkBxBillingAddress.checked == false){

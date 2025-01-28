@@ -26,6 +26,21 @@ const PaypalOrder = (() => {
         }
 
         try {
+            if(ExtendedWarranty.isSelected()){
+                if (!orderData.attribution) {
+    
+                    orderData.attribution = {
+                        "metadata": {
+                            "extended_warranty": true
+                        } 
+                    };
+                }
+            }
+        } catch (error) {
+            console.log('Error adding metadata', error);
+        }
+
+        try {
             const response = await fetch(config.ordersURL, {
                 method: 'POST',
                 headers,
