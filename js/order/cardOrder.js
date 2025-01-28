@@ -39,7 +39,7 @@ const CardOrder = (() => {
                 "phone_number": data.phone_number,
                 "country": data.shipping_country
             },
-            "shipping_method": data.shipping_method,
+            "shipping_method": data.shipping_types,
             "success_url": Campaign.nextStep(nextURL),
         }
 

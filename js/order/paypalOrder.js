@@ -21,7 +21,7 @@ const PaypalOrder = (() => {
             "payment_detail": {
                 "payment_method": data.payment_method,
             },
-            "shipping_method": data.shipping_method,
+            "shipping_method": data.shipping_types,
             "success_url": campaign.nextStep(nextURL)
         }
 
