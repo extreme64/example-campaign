@@ -29,13 +29,16 @@ const ExtendedWarranty = (() => {
 
     const extendedWarrantyClickedHandler = (event, packageId) => {
 
+        const element = event.target.closest('.extended-warranty-comp');
+
         if (isSelected() === false) {
             let index = lineArr.findIndex(item => item.package_id == packageId);
             lineArr.splice(index, 1);
         } else {
             lineArr.push({
                 package_id: packageId,
-                is_upsell: true
+                is_upsell: true,
+                quantity: element.dataset.qty
             })
         }
 
@@ -88,7 +91,12 @@ const ExtendedWarranty = (() => {
                 Cart.calculateTotalWithUpsells();
 
                 extendedWarrantyClickedHandler(event, product.ref_id);
-            });
+            }
+        );
+        
+        document.addEventListener(Packages.events.selectedItem, (event) => {
+            block.dataset.qty = Cart.getTotalQty();
+        });
 
         isOneCreated = true;
 

@@ -136,7 +136,8 @@ const Packages = (() => {
             element.classList.add('selected');
             lineArr.push({
                 package_id: packageId,
-                is_upsell: false
+                is_upsell: false,
+                quantity: element.dataset.quantity
             })
         }
     }
