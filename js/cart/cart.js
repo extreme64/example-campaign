@@ -84,9 +84,6 @@ const Cart = (() => {
 
     const getTotalQty = () => {
 
-        // FIXME: This line is not used anywhere
-        const orderTotal = document.querySelector(".order-summary-total-value");
-
         const selectedPackages = document.querySelectorAll(".offer.selected");
 
         if(!selectedPackages){

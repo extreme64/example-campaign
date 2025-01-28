@@ -113,7 +113,6 @@ const OrderSummary = (() => {
 
         const bundlesListEl = block.querySelector(".selected-bundles-list");
 
-        // TODO: repalce tempalte "q x p'
         const itemTemplate = `
             <div>
                 <span class="selected-product-name">${name}</span> 
